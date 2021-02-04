@@ -8,26 +8,18 @@ https://www.facebook.com/157306517615186/posts/4053883574624108/
 
 from collections import Counter
 
-class Factory:
+class Threats:
     
     def __init__(self, input_):
         lines = [lines.split() for lines in input_.split('\n') if lines]
         
         self.shape_count = int(lines[0][0])
         self.shapes = lines[1:]
-    
+        
     @property
     def shapes(self):
-        shapes_ = self._shapes
-        mapping = []
-        for s in shapes_:
-            coords = []
-            for y in range(s["y"], s["h"] + 1):
-                for x in range(s["x"], s["w"]):
-                    coords.append((x, y))
-            mapping.append(coords)
-        return mapping # A list of tuples of every coordinate in a shape.
-    
+        return self._shapes
+        
     @shapes.setter
     def shapes(self, value):
         if not isinstance(value, list):
@@ -35,38 +27,29 @@ class Factory:
         
         mappings = []
         for input_ in value:
-            mapping = {}
-            attrs = ["x", "y", "w", "h"]
-            for attr, coord in zip(attrs, input_):
-                mapping[attr] = int(coord)
+            mapping = []
+            input_ = map(int, input_)
+            x, y, w, h  = input_
+            for y_ in range(y, y + h):
+                for x_ in range(x, x + w):
+                    mapping.append((x_, y_))
             mappings.append(mapping)
-        self._shapes = mappings  # A list of dictionaries with labled coordinates
-        
-    
-class Threats:
-    
-    def __init__(self, shape_count, shapes):
-        self.shape_count = shape_count
-        self.shapes = shapes
+        self._shapes = mappings  # A list of lists that contain (x, y) tuples
     
     @property
-    def shapes(self):
-        return self._shapes
-        
-    @shapes.setter
-    def shapes(self, value):
-        self._shapes = dict(Counter(i for sub in value for i in set(sub)))
+    def frequency(self):
+        return dict(Counter(i for sub in self.shapes for i in set(sub)))
         
         
     @property
     def ion_cannons(self):
-        cannons = len([nukes for nukes in self.shapes.values() if nukes > 1])
-        return cannons // self.shape_count # number of areas hit by ion cannons
+        cannons = len([nukes for nukes in self.frequency.values() if nukes > 1])
+        return cannons # number of areas hit by ion cannons
         
     @property
     def nukes(self):
-        nuke = len(self.shapes)
-        return nuke - self.ion_cannons # number of areas hit by nukes
+        nuke = len(self.frequency)
+        return nuke # number of areas hit by nukes
 
 # This is the input as with the format as provided in the sample problem
 input = """
@@ -74,7 +57,6 @@ input = """
 0 0 3 3
 1 -1 5 5 
 """
-coords = Factory(input)
-aliens = Threats(coords.shape_count, coords.shapes)
+aliens = Threats(input)
 print(aliens.nukes) # Returns 28
 print(aliens.ion_cannons) # Returns 6
