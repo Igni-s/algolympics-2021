@@ -76,5 +76,5 @@ input = """
 """
 coords = Factory(input)
 aliens = Threats(coords.shape_count, coords.shapes)
-print(aliens.ion_cannons)
-print(aliens.nukes)
+print(aliens.ion_cannons) # Returns 28
+print(aliens.nukes) # Returns 6
