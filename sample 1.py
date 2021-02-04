@@ -1,5 +1,5 @@
 """
-This is my solution to Algolympics mple Problem #1
+This is my solution to Algolympics Sample Problem #1
 
 link to problem:
 https://www.facebook.com/157306517615186/posts/4053883574624108/
