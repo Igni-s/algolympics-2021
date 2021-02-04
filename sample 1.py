@@ -26,7 +26,7 @@ class Factory:
                 for x in range(s["x"], s["w"]):
                     coords.append((x, y))
             mapping.append(coords)
-        return mapping
+        return mapping # A list of tuples of every coordinate in a shape.
     
     @shapes.setter
     def shapes(self, value):
@@ -40,7 +40,7 @@ class Factory:
             for attr, coord in zip(attrs, input_):
                 mapping[attr] = int(coord)
             mappings.append(mapping)
-        self._shapes = mappings  # Rank 2 Tensor with a bunch of coordinates
+        self._shapes = mappings  # A list of dictionaries with labled coordinates
         
     
 class Threats:
@@ -59,14 +59,14 @@ class Threats:
         
         
     @property
-    def nukes(self):
-        nukes = len([nukes for nukes in self.shapes.values() if nukes > 1])
-        return nukes // self.shape_count
+    def ion_cannons(self):
+        cannons = len([nukes for nukes in self.shapes.values() if nukes > 1])
+        return cannons // self.shape_count # number of areas hit by ion cannons
         
     @property
-    def ion_cannons(self):
-        cannon = len(self.shapes)
-        return cannon - self.nukes
+    def nukes(self):
+        nuke = len(self.shapes)
+        return nuke - self.ion_cannons # number of areas hit by nukes
 
 # This is the input as with the format as provided in the sample problem
 input = """
@@ -76,5 +76,5 @@ input = """
 """
 coords = Factory(input)
 aliens = Threats(coords.shape_count, coords.shapes)
-print(aliens.ion_cannons) # Returns 28
-print(aliens.nukes) # Returns 6
+print(aliens.nukes) # Returns 28
+print(aliens.ion_cannons) # Returns 6
