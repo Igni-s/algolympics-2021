@@ -47,8 +47,6 @@ class Convert:
             string = string + 'in'
         return string
 
-    
-
 
 class Factory:
 
